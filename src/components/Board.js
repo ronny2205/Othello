@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Square } from './Square';
-//import { Button } from 'react';
+import { Button } from './Button';
 import PropTypes from 'prop-types';
 // import BlankSymbol from './BlankSymbol';
 // import XSymbol from './XSymbol';
@@ -27,6 +27,11 @@ class Board extends Component {
 //      end = new Date().getTime();
 //   }
 // }
+
+  handleRestartGame() {
+    this.props.startAgain();
+    console.log('restart');
+  }
 
 
   handleClick(row, column){
@@ -125,6 +130,10 @@ class Board extends Component {
         <br />
         <div> You: {this.props.whiteTiles} Tiles </div>
         <div> Computer: {this.props.blackTiles} Tiles </div>
+        <br />
+
+        <Button handleClick={()=>this.handleRestartGame()} label={'Restart the game'} />
+        <br /><br />
         
 
       </div>

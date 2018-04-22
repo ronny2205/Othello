@@ -1,13 +1,3 @@
-// const initialState = {
-  
-//   game: {
-//     isPlayerTurn: true, // vs computer turn
-//     isOver: false,
-//     board: []
-
-//   }
-    
-// }
 
 export const initialState = {
   board: [
@@ -20,7 +10,6 @@ export const initialState = {
      ['', '', '', '', '', '', '', ''],
      ['', '', '', '', '', '', '', '']
   ],
-
   blackTiles: 2,
   whiteTiles: 2,
   isWhiteTurn : true
@@ -72,7 +61,20 @@ export const gameReducer = (state, action) => {
       // }
     }
     case 'START_AGAIN':
-      return initialState;
+
+      const newState = {...initialState};
+      newState.board = [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', 'w', 'b', '', '', ''],
+        ['', '', '', 'b', 'w', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ];
+
+      return newState;
 
     default:
       return state;
