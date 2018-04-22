@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 // import { X, O } from '../symbols/symbols';
 import { addTyle, startAgain } from '../actions/game-actions';
 import { connect } from 'react-redux';
+import { playersTurn, computerTurn } from '../game-logic'
 
 class Board extends Component {
 
@@ -22,7 +23,7 @@ class Board extends Component {
 
   handleClick(row, column){
     //this.props.addTyle('w', row, column);
-     console.log(row, column);
+     //console.log(row, column);
      // if (this.props.board[row][column] === '') {
      //   if (this.props.isWhiteTurn) {
      //     this.props.addTyle("w", row, column);
@@ -31,14 +32,39 @@ class Board extends Component {
      //   }
      // }
 
-     // White player turn
-     if (this.props.board[row][column] === '' && this.props.isWhiteTurn) {
-         this.props.addTyle("w", row, column);
-         this.props.addTyle("w", row-1, column);
-         // Black player (computer) turn
-         //this.props.addTyle("b", row+1, column+1);
+     //console.log(isValidMove(this.props.board, row, column, this.props.isWhiteTurn, 'w'));
 
+     // Player's (white) turn
+    if (this.props.isWhiteTurn) {
+      const squaresToChange = playersTurn(this.props.board, row, column, 'w');
+      if (squaresToChange.length > 0) {
+        squaresToChange.push([row, column]);
+        this.props.addTyle('w', squaresToChange);
+      }
+     //console.log(squaresToChange);
+     //console.log('here');
+      // squaresToChange.forEach((coordinates) => {
+      //     console.log(coordinates[0]);
+      //     console.log(coordinates[1]);
+      //   this.props.addTyle("w", coordinates[0], coordinates[1]);
+      //   this.props.addTyle("w", row, column);
+
+      // });
+    }
+
+     // Computer's (black) turn
+
+     if (!this.props.isWhiteTurn) {
+       computerTurn(this.props.board);
      }
+
+     // White player turn
+     // if (this.props.board[row][column] === '' && this.props.isWhiteTurn) {
+     //     // Flip the color of all surrounded squares
+     //     this.props.addTyle("w", row, column);
+         
+
+     // }
   }
 
 

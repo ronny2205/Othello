@@ -10,11 +10,10 @@
 
 
 
-export const addTyle = (tyle, row, column) => ({
+export const addTyle = (tyle, squaresToChange) => ({
   type: 'ADD_TYLE',
   tyle,
-  row,
-  column
+  squaresToChange
 });
 
 export const startAgain = () => ({

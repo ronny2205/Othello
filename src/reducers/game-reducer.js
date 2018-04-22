@@ -23,12 +23,12 @@ export const initialState = {
   // },
   board: [
      ['', '', '', '', '', '', '', ''],
-     ['', '', '', '', '', '', '', ''],
-     ['', '', '', '', '', '', '', ''],
+     ['', '', '', '', 'b', '', '', ''],
+     ['', '', '', '', 'b', '', '', ''],
      ['', '', '', 'w', 'b', '', '', ''],
      ['', '', '', 'b', 'w', '', '', ''],
-     ['', '', '', '', '', '', '', ''],
-     ['', '', '', '', '', '', '', ''],
+     ['', '', 'b', '', '', '', '', ''],
+     ['', 'w', '', '', '', '', '', ''],
      ['', '', '', '', '', '', '', '']
   ],
 
@@ -50,11 +50,18 @@ export const initialState = {
 export const gameReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_TYLE' : {
-      const {tyle, row, column} = action;
+      console.log(action);
+      // const {tyle, row, column} = action;
+      const {tyle, squaresToChange} = action;
       const newState = {...state}; //_.cloneDeep(state);
       const whosTurn1 = {...state.whosTurn};
-      newState.board[row][column] = tyle;
+      //newState.board[row][column] = tyle;
       //newState.board[row+1][column] = tyle;
+
+      squaresToChange.forEach((coordinates) => {
+        newState.board[coordinates[0]][coordinates[1]] = tyle;
+
+      });
 
       newState.whosTurn = whosTurn1 === 'w' ? 'b' : 'w';
       newState.isWhiteTurn = !newState.isWhiteTurn;
