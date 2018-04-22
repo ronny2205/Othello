@@ -10,17 +10,6 @@
 // }
 
 export const initialState = {
-  //board: Array(8).fill().map(x => Array(8).fill('')),
-  // board: {
-  //   0: ['', '', '', '', '', '', '', ''],
-  //   1: ['', '', '', '', '', '', '', ''],
-  //   2: ['', '', '', '', '', '', '', ''],
-  //   3: ['', '', '', 'W', 'B', '', '', ''],
-  //   4: ['', '', '', 'B', 'W', '', '', ''],
-  //   5: ['', '', '', '', '', '', '', ''],
-  //   6: ['', '', '', '', '', '', '', ''],
-  //   7: ['', '', '', '', '', '', '', '']
-  // },
   board: [
      ['', '', '', '', '', '', '', ''],
      ['', '', '', '', '', '', '', ''],
@@ -32,18 +21,8 @@ export const initialState = {
      ['', '', '', '', '', '', '', '']
   ],
 
-  // avaiableSpots: {
-  //   {row: 0, col: 0}
-  // }
-
-  // avaiableSpots: Array(62).fill([1,2]),
-  //avaiableSpots: board.map(row, i)
-  
-
-  won: undefined,
-  wonLine: undefined,
-  draw: false,
-  whosTurn: 'b',
+  blackTiles: 2,
+  whiteTiles: 2,
   isWhiteTurn : true
 };
 
@@ -54,7 +33,7 @@ export const gameReducer = (state, action) => {
       // const {tyle, row, column} = action;
       const {tyle, squaresToChange} = action;
       const newState = {...state}; //_.cloneDeep(state);
-      const whosTurn1 = {...state.whosTurn};
+      //const whosTurn1 = {...state.whosTurn};
       //newState.board[row][column] = tyle;
       //newState.board[row+1][column] = tyle;
 
@@ -63,8 +42,13 @@ export const gameReducer = (state, action) => {
 
       });
 
-      newState.whosTurn = whosTurn1 === 'w' ? 'b' : 'w';
+      //newState.whosTurn = whosTurn1 === 'w' ? 'b' : 'w';
       newState.isWhiteTurn = !newState.isWhiteTurn;
+
+      const flattenBoard = [].concat(...state.board);
+
+      newState.whiteTiles = flattenBoard.filter((item) => {return item === 'w'}).length;
+      newState.blackTiles = flattenBoard.filter((item) => {return item === 'b'}).length;
       
       return newState;
 

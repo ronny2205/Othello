@@ -108,21 +108,25 @@ class Board extends Component {
       </tr>)
     });
     
-    const whosTurn = this.props.isWhiteTurn ? 'white' : 'black';
+    const whosTurn = this.props.isWhiteTurn ? 'Your Turn (white)' : 'Computer\'s Turn (black)';
 
     return (
      
 
       <div style={{ textAlign:'center'}}>
-      <div style={{margin: 'auto', width:"40%"}}>
-      <div> {whosTurn} </div>
-      <table cellSpacing="0" style={style}>
-        <tbody>
-          {board}
-        </tbody>
-      </table>
-      </div>
-      <br />
+        <div style={{margin: 'auto', width:"40%"}}>
+          <h3> {whosTurn} </h3>
+          <table cellSpacing="0" style={style}>
+            <tbody>
+              {board}
+            </tbody>
+          </table>
+        </div>
+        <br />
+        <div> You: {this.props.whiteTiles} Tiles </div>
+        <div> Computer: {this.props.blackTiles} Tiles </div>
+        
+
       </div>
     );
   }
@@ -130,8 +134,8 @@ class Board extends Component {
 
 
 export default connect(
-  ({board, whosTurn, won, draw, wonLine, isWhiteTurn}) => ({
-    board, whosTurn, won, draw, wonLine, isWhiteTurn
+  ({board, blackTiles, whiteTiles, isWhiteTurn}) => ({
+    board, blackTiles, whiteTiles, isWhiteTurn
   }),
   (dispatch) => {
     return {
