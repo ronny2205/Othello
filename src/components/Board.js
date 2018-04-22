@@ -20,6 +20,14 @@ class Board extends Component {
   //   this.props.addTyle(tyle, row, column);
   // }
 
+//   wait(ms){
+//    var start = new Date().getTime();
+//    var end = start;
+//    while(end < start + ms) {
+//      end = new Date().getTime();
+//   }
+// }
+
 
   handleClick(row, column){
     //this.props.addTyle('w', row, column);
@@ -35,36 +43,36 @@ class Board extends Component {
      //console.log(isValidMove(this.props.board, row, column, this.props.isWhiteTurn, 'w'));
 
      // Player's (white) turn
+     // setTimeout(() => {
+     //  console.log('pupik');
+     // }, 3000);
+
     if (this.props.isWhiteTurn) {
       const squaresToChange = playersTurn(this.props.board, row, column, 'w');
       if (squaresToChange.length > 0) {
         squaresToChange.push([row, column]);
         this.props.addTyle('w', squaresToChange);
-      }
-     //console.log(squaresToChange);
-     //console.log('here');
-      // squaresToChange.forEach((coordinates) => {
-      //     console.log(coordinates[0]);
-      //     console.log(coordinates[1]);
-      //   this.props.addTyle("w", coordinates[0], coordinates[1]);
-      //   this.props.addTyle("w", row, column);
+      
 
-      // });
+      //this.wait(4000); 
+
+      // Computer's (black) turn
+        const computerSquaresToChange = computerTurn(this.props.board);
+        console.log(computerSquaresToChange);
+        if (computerSquaresToChange.length > 0) {
+          setTimeout(() => {
+            this.props.addTyle('b', computerSquaresToChange);
+          }, 2000);
+          // this.props.addTyle('b', computerSquaresToChange);
+        } else {
+          console.log('no moves for black');
+        }
+      }
+
+     
     }
 
-     // Computer's (black) turn
-
-     if (!this.props.isWhiteTurn) {
-       computerTurn(this.props.board);
-     }
-
-     // White player turn
-     // if (this.props.board[row][column] === '' && this.props.isWhiteTurn) {
-     //     // Flip the color of all surrounded squares
-     //     this.props.addTyle("w", row, column);
-         
-
-     // }
+     
   }
 
 

@@ -37,9 +37,83 @@ const validateCoordinatesInBoard = (row, column) => {
   return (row <= MAX_INDEX && row >= MIN_INDEX && column <= MAX_INDEX && column >= MIN_INDEX);
 }
 
+const findSquaresToChange = (grid, row, column, coordinatesAroundSquare, currentPlayerColor) => {
+  console.log('hellooooooo');
+  let finalSquaresToFlip = [];
+
+  coordinatesAroundSquare.forEach((coordinates) => {
+  
+    const nextSquareRow = coordinates[0];
+    const nextSquareCol = coordinates[1];
+
+    const rowDiff = nextSquareRow - row;
+    const colDiff = nextSquareCol - column;
+
+console.log(rowDiff);
+console.log(colDiff);
+
+    // Looking for the next square with the current player's color
+    const potentialSquaresToFlip = [
+     [nextSquareRow, nextSquareCol]
+    ];
+    let i = nextSquareRow + rowDiff;
+    let j = nextSquareCol + colDiff;
+    //let foundSameColorSquare = false;
+    let foundEmptySquare = false;
+    while (i <= MAX_INDEX && i >= MIN_INDEX && j <= MAX_INDEX && j >= MIN_INDEX && !foundEmptySquare) {
+      //console.log(i, j);
+      if (grid[i][j] === currentPlayerColor) {
+        //flipColors(potentialSquaresToFlip);
+        console.log(potentialSquaresToFlip);
+        finalSquaresToFlip = [...potentialSquaresToFlip];
+        //foundSameColorSquare = true;
+        //return true;
+        //return potentialSquaresToFlip;
+        break;
+      } else if (grid[i][j] === EMPTY_SQUARE) {
+        foundEmptySquare = true;
+      }
+
+      potentialSquaresToFlip.push([i, j]);
+      i += rowDiff;
+      j += colDiff;
+    }
+  }); 
+  return finalSquaresToFlip;
+}
+
 export const computerTurn = (grid) => {
   console.log('computeer now');
+  let squaresToChange = [];
+  // Iterate through the board and try to find a valid move
+  let i = MIN_INDEX;
+  let validMoveFound = false;
+  while (i <= MAX_INDEX && !validMoveFound) {
+    let j = MIN_INDEX;
+    while (j <= MAX_INDEX && !validMoveFound) {
+      //console.log(i, j);
+      if (grid[i][j] === EMPTY_SQUARE) {
+         const coordinatesAroundSquare = getCoordinatesAroundSquare(grid, i, j, 'w');
+         
+         if (coordinatesAroundSquare.length > 0) {
+          //console.log(i, j);
+           //console.log(coordinatesAroundSquare);
+
+           squaresToChange = findSquaresToChange(grid, i, j, coordinatesAroundSquare, 'b');
+           //console.log(squaresToChange);
+           if (squaresToChange.length > 0) {
+            squaresToChange.push([i, j]);
+            validMoveFound = true;
+           }
+         }
+      }
+      j++;
+    }
+    i++;
+  }
+return squaresToChange;
 }
+
 
 export const playersTurn = (grid, row, column, currentPlayerColor) => {
   if (grid[row][column] !== EMPTY_SQUARE) {
