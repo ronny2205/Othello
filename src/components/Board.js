@@ -23,15 +23,14 @@ class Board extends Component {
         this.props.changeTyle('w', squaresToChange);
 
         // Computer's (black) turn
-        //while (!this.props.isWhiteTurn) {
-          const computerSquaresToChange = computerTurn(this.props.board);
-          if (computerSquaresToChange.length > 0) {
-            // Set a 2 seconds timeout before the computer moves its tiles
-            setTimeout(() => {
-              this.props.changeTyle('b', computerSquaresToChange);
-            }, 2000);
-          }
-        //}  
+        
+        const computerSquaresToChange = computerTurn(this.props.board);
+        if (computerSquaresToChange.length > 0) {
+          // Set a 2 seconds timeout before the computer moves its tiles
+          setTimeout(() => {
+            this.props.changeTyle('b', computerSquaresToChange);
+          }, 2000);
+        }  
       }
     }
   }
