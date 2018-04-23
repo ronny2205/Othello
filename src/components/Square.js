@@ -1,11 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-export class Square extends React.Component{
+export class Square extends Component{
   render(){
-    //const color_ = this.props.color;
-
-    
-
     const color_ = this.props.color === '' ? '#e4e4a1': this.props.color === 'w' ? 'white':'black';
     return (
       <td
@@ -31,3 +28,8 @@ export class Square extends React.Component{
     )
   }
 }
+
+Square.propTypes = {
+  color: PropTypes.string.isRequired,
+  handleClick: PropTypes.func.isRequired
+};

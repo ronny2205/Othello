@@ -1,17 +1,6 @@
-// export function playerMove(isOver, isPlayerTurn) {
-//   return {
-//     type: 1,
-//     payload: { isOver, isPlayerTurn }
-//   }
-// }
 
-
-
-
-
-
-export const addTyle = (tyle, squaresToChange) => ({
-  type: 'ADD_TYLE',
+export const changeTyle = (tyle, squaresToChange) => ({
+  type: 'CHANGE_TYLE',
   tyle,
   squaresToChange
 });

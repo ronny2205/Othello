@@ -1,3 +1,4 @@
+import { hasValidMoves } from '../game-logic'
 
 export const initialState = {
   board: [
@@ -12,27 +13,55 @@ export const initialState = {
   ],
   blackTiles: 2,
   whiteTiles: 2,
-  isWhiteTurn : true
+  isWhiteTurn: true,
+  whitePlayerOutOfMoves: false,
+  blackPlayerOutOfMoves: false,
+  isGameOver: false,
+  noMovesMsg: '',
+  winner: ''
 };
 
 export const gameReducer = (state, action) => {
   switch (action.type) {
-    case 'ADD_TYLE' : {
-      console.log(action);
-      // const {tyle, row, column} = action;
+    case 'CHANGE_TYLE' : {
       const {tyle, squaresToChange} = action;
-      const newState = {...state}; //_.cloneDeep(state);
-      //const whosTurn1 = {...state.whosTurn};
-      //newState.board[row][column] = tyle;
-      //newState.board[row+1][column] = tyle;
-
+      const newState = {...state};
+      //const isWhiteTurn = ...state.isWhiteTurn;
+     
       squaresToChange.forEach((coordinates) => {
         newState.board[coordinates[0]][coordinates[1]] = tyle;
-
       });
 
-      //newState.whosTurn = whosTurn1 === 'w' ? 'b' : 'w';
-      newState.isWhiteTurn = !newState.isWhiteTurn;
+      // Check whether the players has valid moves
+      const whiteHasValidMoves = hasValidMoves(newState.board, 'w');
+      const blackHasValidMoves = hasValidMoves(newState.board, 'b');
+
+
+      if (newState.isWhiteTurn) {
+        if (!blackHasValidMoves) {
+          newState.noMovesMsg = 'No moves for black'
+        } else {
+          newState.isWhiteTurn = !newState.isWhiteTurn;
+          newState.noMovesMsg = '';
+        }
+      } else {
+        if (!whiteHasValidMoves) {
+          newState.noMovesMsg = 'No moves for white'
+        } else {
+          newState.isWhiteTurn = !newState.isWhiteTurn;
+          newState.noMovesMsg = '';
+        }
+      }
+
+      newState.whitePlayerOutOfMoves = !whiteHasValidMoves;
+      newState.blackPlayerOutOfMoves = !blackHasValidMoves;
+
+      if (!whiteHasValidMoves && !blackHasValidMoves) {
+        newState.isGameOver = true;
+        newState.winner = newState.blackTiles ===  newState.whiteTiles ? 'draw' : newState.blackTiles > newState.whiteTiles ? 'black' : 'white';
+      }
+
+      //newState.isWhiteTurn = !newState.isWhiteTurn;
 
       const flattenBoard = [].concat(...state.board);
 
@@ -40,25 +69,6 @@ export const gameReducer = (state, action) => {
       newState.blackTiles = flattenBoard.filter((item) => {return item === 'b'}).length;
       
       return newState;
-
-      // return {
-      //   ...state,
-      //  // game: [...state.game, action.payload]
-      //  game: {
-      //   isPlayerTurn: !state.game.isPlayerTurn //prevstate
-      //  }
-      // }
-
-      // return {
-      //   ...state,
-      //   board: state.board.map((item, i) => i === row ? action.payload : item)
-
-    //   return{
-    //   ...state,
-    //   //player: { ...state.player, coords: newCoords },
-    //   board: [ ...state.board, state.board[row][column] = tyle ]
-    // }
-      // }
     }
     case 'START_AGAIN':
 

@@ -1,8 +1,9 @@
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 const buttonStyle = {
-  margin: '10px 10px 10px 0'
+  margin: '20px 20px 20px 0'
 };
 
 export class Button extends Component {
@@ -15,3 +16,8 @@ export class Button extends Component {
     );
   }
 }
+
+Button.propTypes = {
+  label: PropTypes.string.isRequired,
+  handleClick: PropTypes.func.isRequired
+};

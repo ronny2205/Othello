@@ -1,86 +1,40 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Square } from './Square';
 import { Button } from './Button';
-import PropTypes from 'prop-types';
-// import BlankSymbol from './BlankSymbol';
-// import XSymbol from './XSymbol';
-// import OSymbol from './OSymbol';
-// import { X, O } from '../symbols/symbols';
-import { addTyle, startAgain } from '../actions/game-actions';
+import { changeTyle, startAgain } from '../actions/game-actions';
 import { connect } from 'react-redux';
 import { playersTurn, computerTurn } from '../game-logic'
 
 class Board extends Component {
 
- 
-
-
-  // handleAddTyle(tyle, row, column) {
-  //   console.log('adding');
-  //   this.props.addTyle(tyle, row, column);
-  // }
-
-//   wait(ms){
-//    var start = new Date().getTime();
-//    var end = start;
-//    while(end < start + ms) {
-//      end = new Date().getTime();
-//   }
-// }
-
+  // Start a new game
   handleRestartGame() {
     this.props.startAgain();
-    console.log('restart');
   }
 
-
-  handleClick(row, column){
-    //this.props.addTyle('w', row, column);
-     //console.log(row, column);
-     // if (this.props.board[row][column] === '') {
-     //   if (this.props.isWhiteTurn) {
-     //     this.props.addTyle("w", row, column);
-     //   } else {
-     //    this.props.addTyle("b", row, column);
-     //   }
-     // }
-
-     //console.log(isValidMove(this.props.board, row, column, this.props.isWhiteTurn, 'w'));
-
-     // Player's (white) turn
-     // setTimeout(() => {
-     //  console.log('pupik');
-     // }, 3000);
-
+  // Handle a click on the board
+  handleClick(row, column){  
+    // Player's (white) turn
     if (this.props.isWhiteTurn) {
       const squaresToChange = playersTurn(this.props.board, row, column, 'w');
       if (squaresToChange.length > 0) {
         squaresToChange.push([row, column]);
-        this.props.addTyle('w', squaresToChange);
-      
+        this.props.changeTyle('w', squaresToChange);
 
-      //this.wait(4000); 
-
-      // Computer's (black) turn
-        const computerSquaresToChange = computerTurn(this.props.board);
-        console.log(computerSquaresToChange);
-        if (computerSquaresToChange.length > 0) {
-          setTimeout(() => {
-            this.props.addTyle('b', computerSquaresToChange);
-          }, 2000);
-          // this.props.addTyle('b', computerSquaresToChange);
-        } else {
-          console.log('no moves for black');
-        }
+        // Computer's (black) turn
+        //while (!this.props.isWhiteTurn) {
+          const computerSquaresToChange = computerTurn(this.props.board);
+          if (computerSquaresToChange.length > 0) {
+            // Set a 2 seconds timeout before the computer moves its tiles
+            setTimeout(() => {
+              this.props.changeTyle('b', computerSquaresToChange);
+            }, 2000);
+          }
+        //}  
       }
-
-     
     }
-
-     
   }
-
-
 
   render() {
     const style={
@@ -96,15 +50,8 @@ class Board extends Component {
     const board = grid.map((row, i) => { return (
       <tr key={"row_"+i}>
         {row.map((col, j) => {
-          //set the color of the square based on state.grid
-          //const color_ = grid[i][j] === '' ? '#e4e4a1': grid[i][j] === 'w' ? 'white':'black';
           const color_ = grid[i][j];
-          //return Square component, passing in the following as props:
-          //square color defined above in color_,
-          //a value for the key which React needs (I think) and
-          //a function to handle clicks with grid coordinates passed in as arguments
           return (
-            // <Square handleClick={()=>this.handleClick(i,j)} color={color_} key={i+"_"+j} />
             <Square handleClick={()=>this.handleClick(i,j)} color={color_} key={i+"_"+j} />
               )
             }
@@ -115,9 +62,15 @@ class Board extends Component {
     
     const whosTurn = this.props.isWhiteTurn ? 'Your Turn (white)' : 'Computer\'s Turn (black)';
 
-    return (
-     
+    const noTurnMsg = (this.props.isWhiteTurn && this.props.whitePlayerOutOfMoves) || (!this.props.isWhiteTurn && this.props.blackPlayerOutOfMoves) ? this.props.noTurnMsg : '';
 
+    let endOfGameMsg = '';
+
+    if (this.props.isGameOver) {
+     endOfGameMsg = this.props.winner === 'draw' ? 'Draw' : this.props.winner === 'white' ? 'White is the winner' : 'Black is the winer';
+    }
+
+    return (
       <div style={{ textAlign:'center'}}>
         <div style={{margin: 'auto', width:"40%"}}>
           <h3> {whosTurn} </h3>
@@ -131,25 +84,35 @@ class Board extends Component {
         <div> You: {this.props.whiteTiles} Tiles </div>
         <div> Computer: {this.props.blackTiles} Tiles </div>
         <br />
-
+        <div> {noTurnMsg} </div>
+        <div> {endOfGameMsg} </div>
         <Button handleClick={()=>this.handleRestartGame()} label={'Restart the game'} />
         <br /><br />
-        
-
       </div>
     );
   }
 }
 
+Board.propTypes = {
+  board: PropTypes.array.isRequired,
+  blackTiles: PropTypes.number.isRequired,
+  whiteTiles: PropTypes.number.isRequired,
+  isWhiteTurn: PropTypes.bool.isRequired,
+  isGameOver: PropTypes.bool.isRequired,
+  whitePlayerOutOfMoves: PropTypes.bool.isRequired,
+  blackPlayerOutOfMoves: PropTypes.bool.isRequired,
+  noMovesMsg: PropTypes.string.isRequired,
+  winner: PropTypes.string.isRequired
+};
 
 export default connect(
-  ({board, blackTiles, whiteTiles, isWhiteTurn}) => ({
-    board, blackTiles, whiteTiles, isWhiteTurn
+  ({board, blackTiles, whiteTiles, isWhiteTurn, isGameOver, whitePlayerOutOfMoves, blackPlayerOutOfMoves, noMovesMsg, winner}) => ({
+    board, blackTiles, whiteTiles, isWhiteTurn, isGameOver, whitePlayerOutOfMoves, blackPlayerOutOfMoves, noMovesMsg, winner
   }),
   (dispatch) => {
     return {
-      addTyle (tyle, row, column) {
-        dispatch(addTyle(tyle, row, column));
+      changeTyle (tyle, row, column) {
+        dispatch(changeTyle(tyle, row, column));
       },
       startAgain () {
         dispatch(startAgain());
