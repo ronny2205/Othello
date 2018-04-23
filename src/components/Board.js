@@ -22,8 +22,7 @@ class Board extends Component {
         squaresToChange.push([row, column]);
         this.props.changeTyle('w', squaresToChange);
 
-        // Computer's (black) turn
-        
+        // Computer's (black) turn 
         const computerSquaresToChange = computerTurn(this.props.board);
         if (computerSquaresToChange.length > 0) {
           // Set a 2 seconds timeout before the computer moves its tiles
@@ -60,9 +59,7 @@ class Board extends Component {
     });
     
     const whosTurn = this.props.isWhiteTurn ? 'Your Turn (white)' : 'Computer\'s Turn (black)';
-
-    const noTurnMsg = (this.props.isWhiteTurn && this.props.whitePlayerOutOfMoves) || (!this.props.isWhiteTurn && this.props.blackPlayerOutOfMoves) ? this.props.noTurnMsg : '';
-
+    const noMovesMsg = (this.props.noMovesMsg && !this.props.isGameOver) ? this.props.noMovesMsg : '';
     let endOfGameMsg = '';
 
     if (this.props.isGameOver) {
@@ -83,7 +80,7 @@ class Board extends Component {
         <div> You: {this.props.whiteTiles} Tiles </div>
         <div> Computer: {this.props.blackTiles} Tiles </div>
         <br />
-        <div> {noTurnMsg} </div>
+        <div> {noMovesMsg} </div>
         <div> {endOfGameMsg} </div>
         <Button handleClick={()=>this.handleRestartGame()} label={'Restart the game'} />
         <br /><br />

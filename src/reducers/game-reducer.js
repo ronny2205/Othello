@@ -26,7 +26,6 @@ export const gameReducer = (state, action) => {
     case 'CHANGE_TYLE' : {
       const {tyle, squaresToChange} = action;
       const newState = {...state};
-      //const isWhiteTurn = ...state.isWhiteTurn;
      
       squaresToChange.forEach((coordinates) => {
         newState.board[coordinates[0]][coordinates[1]] = tyle;
@@ -60,8 +59,6 @@ export const gameReducer = (state, action) => {
         newState.isGameOver = true;
         newState.winner = newState.blackTiles ===  newState.whiteTiles ? 'draw' : newState.blackTiles > newState.whiteTiles ? 'black' : 'white';
       }
-
-      //newState.isWhiteTurn = !newState.isWhiteTurn;
 
       const flattenBoard = [].concat(...state.board);
 
